@@ -12,8 +12,6 @@ use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
 
-use App\Repositories\CommonRepository;
-
 use App\Http\Requests\RolePermissionRequest;
 
 
