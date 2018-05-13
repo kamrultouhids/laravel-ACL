@@ -4,8 +4,6 @@ namespace App\Http\Controllers\User;
 
 use Session;
 
-use App\Model\Employee;
-
 use Illuminate\Http\Request;
 
 use App\Http\Requests\LoginRequest;
