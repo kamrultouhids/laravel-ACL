@@ -8,10 +8,15 @@
 				<li class="active breadcrumbColor"><a href="{{ url('dashboard') }}"><i class="fa fa-home"></i> Dashboard</a></li>
 				<li>@yield('title')</li>
 			</ol>
-		</div>	
-		<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
-			<a href="{{ route('user.create') }}"  class="btn btn-success pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus-circle" aria-hidden="true"></i> Add User</a>
-		</div>	
+		</div>
+		@php
+			$permissionCheck = permissionCheck();
+		@endphp
+		@if (in_array('user.create',array_column($permissionCheck, 'menu_url')))
+			<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
+				<a href="{{ route('user.create') }}"  class="btn btn-success pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus-circle" aria-hidden="true"></i> Add User</a>
+			</div>
+		@endif
 	</div>
                 
 	<div class="row">
@@ -54,10 +59,15 @@
 												<span class="label label-{{ $value->status==2 ? 'warning' : 'success' }}">{{ $value->status==2 ? 'Inactive' : 'Active' }}</span>
 											</td>
 											<td style="width: 100px;">
-												<a href="{!! route('user.edit',$value->user_id) !!}"  class="btn btn-success btn-xs btnColor">
-													<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-												</a>
-												<a href="{!!route('user.destroy',$value->user_id )!!}" class="delete btn btn-danger btn-xs deleteBtn btnColor"  data-token="{!! csrf_token() !!}" data-id="{!! $value->user_id !!}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+												@if (in_array('user.edit',array_column($permissionCheck, 'menu_url')))
+													<a href="{!! route('user.edit',$value->user_id) !!}"  class="btn btn-success btn-md btnColor">
+														<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+													</a>
+												@endif
+												@if (in_array('user.destroy',array_column($permissionCheck, 'menu_url')))
+													<a href="{!!route('user.destroy',$value->user_id )!!}" class="delete btn btn-danger btn-md deleteBtn btnColor"
+													   data-token="{!! csrf_token() !!}" data-id="{!! $value->user_id !!}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+												@endif
 											</td>
 										</tr>
 									@endforeach
