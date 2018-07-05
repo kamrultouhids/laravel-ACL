@@ -40,7 +40,6 @@ class RolePermissionController extends Controller
                     ->join('modules', 'modules.id', '=', 'menus.module_id')
                     ->where('menus.status', '=', 1)
                     ->whereNotNull('menu_url')
-                    ->orderBy('module_group_id','ASC')
                     ->get()->toJSON(),true);
 
         $arrayFormat = [];

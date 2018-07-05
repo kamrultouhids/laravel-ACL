@@ -1,6 +1,15 @@
 @extends('admin.master')
 @section('content')
 @section('title','Add Role Permission')
+<style>
+    .checkbox label, .radio label {
+        min-height: 20px;
+        padding-left: 5px;
+        margin-bottom: 0;
+        font-weight: 400;
+        cursor: text;
+    }
+</style>
 	<div class="container-fluid">
 		<div class="row bg-title">
 			<div class="col-lg-5 col-md-5 col-sm-5 col-xs-12">
@@ -147,7 +156,7 @@
                             }
                             dataFormat += '<div class="checkbox checkbox-info">';
                             dataFormat += '<input class="inputCheckbox" data-menu="' + value1['id'] + '" type="checkbox" id="inlineCheckbox1'+sl+'" ' + checkedValue + ' name="menu_id[]" value="' + value1['id'] + '">';
-                            dataFormat += '<label for="inlineCheckbox1'+sl+'">'+ value1['name'] + '</label>';
+                            dataFormat += '<label>'+ value1['name'] + '</label>';
                             dataFormat += '</div>';
                             if(result.subMenu[value1['id']] !== undefined){
                                 subMenus = result.subMenu[value1['id']];
@@ -164,7 +173,7 @@
                                     i++;
                                     dataFormat += '<div style="'+subMenuCss+'" class="checkbox checkbox-inline checkbox-primary">';
                                     dataFormat += '<input class="inputCheckbox" type="checkbox" id="inlineCheckbox'+subMenus[subMenuIndex].id+'" value="' + subMenus[subMenuIndex].id + '" data-formenu="' + value1['id'] + '" '+checkedValue+' name="menu_id[]" value="'+subMenus[subMenuIndex].id+'">';
-                                    dataFormat += '<label for="inlineCheckbox'+subMenus[subMenuIndex].id+'"> '+subMenus[subMenuIndex].name+' </label>';
+                                    dataFormat += '<label > '+subMenus[subMenuIndex].name+' </label>';
                                     dataFormat += '</div>';
                                 }
                                 i=1;
