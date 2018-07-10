@@ -21,7 +21,7 @@ class CreateMenusTable extends Migration
             $table->string('menu_url')->nullable();
             $table->integer('module_id');
             $table->integer('status')->default(1);
-            $table->string('module_group_id');
+            $table->float('module_group_id',2,1);
         });
     }
 
