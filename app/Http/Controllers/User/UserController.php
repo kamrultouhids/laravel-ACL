@@ -74,7 +74,7 @@ class UserController extends Controller
 
         $data                = User::FindOrFail($id);
         $input               = $request->all();
-        $input['created_by'] = Auth::user()->user_id;;
+        $input['created_by'] = Auth::user()->user_id;
         $input['updated_by'] = Auth::user()->user_id;
 
         try{
