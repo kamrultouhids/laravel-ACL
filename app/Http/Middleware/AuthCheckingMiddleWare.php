@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use Closure;
 
 use DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class AuthCheckingMiddleWare
 {
@@ -17,22 +19,18 @@ class AuthCheckingMiddleWare
      */
     public function handle($request, Closure $next)
     {
-        $role_id = session('logged_session_data.role_id');
-        if(isset($role_id))
+        if(isset(Auth::user()->role_id))
         {
-            $namedRoute 		= \Route::currentRouteName();
-            $current_url_check  = DB::table('menus')->select('menu_url')->where('menu_url', $namedRoute)->where('status', 1)->get()->toArray();
+            $role_id    = Auth::user()->role_id;
+            $namedRoute = \Route::currentRouteName();
+
             if ($namedRoute)
             {
-                if ($current_url_check)
-                {
-                    $permissionCheck = DB::table('menus')
-                        ->join('menu_permission', 'menu_permission.menu_id', '=', 'menus.id')
-                        ->where('role_id', $role_id)
-                        ->where('menu_url', $namedRoute)
-                        ->get()->toArray();
-                    if (empty($permissionCheck) || count($permissionCheck) < 0)
-                    {
+                $all_menu = Session::get('all_menus');
+                if(in_array($namedRoute,$all_menu)){
+
+                    $permissionCheck = Session::get('permission_menu');
+                    if(!in_array($namedRoute,$permissionCheck)){
                         return response()->view('errors.404', [], 404);
                     }
                 }

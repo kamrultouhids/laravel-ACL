@@ -12,6 +12,8 @@
 */
 
 Route::get('/', 'User\LoginController@index');
+Route::get('back_to_home', 'User\RolePermissionController@back_to_home')->name('back_to_home');
+Route::get('/login', 'User\LoginController@index');
 Route::post('login', 'User\LoginController@Auth');
 
 

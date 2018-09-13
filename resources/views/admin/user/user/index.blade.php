@@ -10,9 +10,9 @@
 			</ol>
 		</div>
 		@php
-			$permissionCheck = permissionCheck();
+			$permissionCheck = Session::get('permission_menu');
 		@endphp
-		@if (in_array('user.create',array_column($permissionCheck, 'menu_url')))
+		@if (in_array('user.create',$permissionCheck))
 			<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 				<a href="{{ route('user.create') }}"  class="btn btn-success pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus-circle" aria-hidden="true"></i> Add User</a>
 			</div>
@@ -59,12 +59,12 @@
 												<span class="label label-{{ $value->status==2 ? 'warning' : 'success' }}">{{ $value->status==2 ? 'Inactive' : 'Active' }}</span>
 											</td>
 											<td style="width: 100px;">
-												@if (in_array('user.edit',array_column($permissionCheck, 'menu_url')))
+												@if (in_array('user.edit',$permissionCheck))
 													<a href="{!! route('user.edit',$value->user_id) !!}"  class="btn btn-success btn-md btnColor">
 														<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 													</a>
 												@endif
-												@if (in_array('user.destroy',array_column($permissionCheck, 'menu_url')))
+												@if (in_array('user.destroy',$permissionCheck))
 													<a href="{!!route('user.destroy',$value->user_id )!!}" class="delete btn btn-danger btn-md deleteBtn btnColor"
 													   data-token="{!! csrf_token() !!}" data-id="{!! $value->user_id !!}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
 												@endif

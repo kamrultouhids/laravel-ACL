@@ -145,13 +145,10 @@
                         <input type="text" placeholder="Search..." class="form-control"> <a href=""><i class="fa fa-search"></i></a> </form>
                 </li>
                 <li class="dropdown">
-                    <?php
-                     $employeeInfo = employeeInfo();
-                    ?>
 
                     <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#"> <img
                                 src="{!! asset('admin_assets/img/default.png') !!}" alt="user-img" width="36"
-                                class="img-circle"><b class="hidden-xs"><span class="hideMenu">{!!   $employeeInfo->user_name !!}</span></b><span
+                                class="img-circle"><b class="hidden-xs"><span class="hideMenu">{!!  auth()->user()->user_name !!}</span></b><span
                                 class="caret hideMenu"></span> </a>
 
                     <ul class="dropdown-menu dropdown-user animated flipInY">
@@ -186,7 +183,7 @@
                     </div>
 
                     <a href="#" class="dropdown-toggle u-dropdown " data-toggle="dropdown" role="button"
-                       aria-haspopup="true" aria-expanded="false"><span class="hideMenu">{!!   $employeeInfo->user_name !!}</span> </a>
+                       aria-haspopup="true" aria-expanded="false"><span class="hideMenu">   {!!  auth()->user()->user_name !!} </span> </a>
 
                 </div>
             </div>
@@ -195,6 +192,8 @@
                                                                              data-icon="v"></i> <span class="hide-menu hideMenu"> Dashboard  </span></a>
                 </li>
                 <?php
+
+
                 $sideMenu = showMenu();
                 $menuItem = '';
 				

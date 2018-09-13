@@ -15,13 +15,11 @@
 		}
 	}
 
-	function employeeInfo(){
-        return DB::table('user')->where('user_id',session('logged_session_data.user_id'))->first();
-    }
+
 
 	function permissionCheck(){
 
-		$role_id = session('logged_session_data.role_id');
+		$role_id = \Illuminate\Support\Facades\Auth::user()->role_id;
 		return $result =  json_decode(DB::table('menus')->select('menu_url')
 						->join('menu_permission', 'menu_permission.menu_id', '=', 'menus.id')
 						->where('menu_permission.role_id', '=', $role_id)
@@ -30,16 +28,10 @@
 	}
 
 	function showMenu(){
-        $role_id = session('logged_session_data.role_id');
-        $modules = json_decode(DB::table('modules')->get()->toJson(), true);
-        $menus =  json_decode(DB::table('menus')
-            ->select(DB::raw('menus.id, menus.name, menus.menu_url, menus.parent_id, menus.module_id'))
-            ->join('menu_permission', 'menu_permission.menu_id', '=', 'menus.id')
-            ->where('menu_permission.role_id',$role_id)
-            ->where('menus.status',1)
-            ->whereNull('action')
-            ->orderBy('module_group_id','ASC')
-            ->get()->toJson(),true);
+        $role_id = \Illuminate\Support\Facades\Auth::user()->role_id;
+        $modules = \Illuminate\Support\Facades\Session::get('modules');
+        $menus = \Illuminate\Support\Facades\Session::get('menus');
+
         $sideMenu = [];
         if($menus){
             foreach ($menus as $menu){

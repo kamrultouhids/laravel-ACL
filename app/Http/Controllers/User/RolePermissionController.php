@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\User;
 
+use App\Model\Menu;
+use App\Model\Module;
 use App\Model\Role;
 
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
 use function MongoDB\BSON\toJSON;
 
 use Illuminate\Support\Facades\DB;
@@ -109,7 +112,7 @@ class RolePermissionController extends Controller
                     );
                     DB::table('menu_permission')->insert($insertMenu);
                 }
-
+            $this->reset_session();
             DB::commit();
             $bug = 0;
         }
@@ -126,6 +129,37 @@ class RolePermissionController extends Controller
 
     }
 
+    public function reset_session()
+    {
+        $all_menu =  array_column(json_decode(Menu::select('menu_url')->where('status', 1)->where('menu_url','!=',null)->get()->toJson(), true),'menu_url');
+
+        $permission_menu_for_sideber_show =  json_decode(Menu::select(DB::raw('menus.id, menus.name, menus.menu_url, menus.parent_id, menus.module_id'))
+            ->join('menu_permission', 'menu_permission.menu_id', '=', 'menus.id')
+            ->where('menu_permission.role_id',Auth::user()->role_id)
+            ->where('menus.status',1)
+            ->whereNull('action')
+            ->orderBy('module_group_id','ASC')
+            ->get()->toJson(),true);
+
+        $modules = json_decode(Module::get()->toJson(), true);
+
+        $permission_menu = array_column(json_decode(Menu::join('menu_permission', 'menu_permission.menu_id', '=', 'menus.id')
+            ->where('role_id', Auth::user()->role_id)
+            ->where('menu_url', '!=',null)
+            ->get()->toJson(), true),'menu_url');
+
+
+        session()->put('modules', $modules);
+        session()->put('menus', $permission_menu_for_sideber_show);
+        session()->put('all_menus', $all_menu);
+        session()->put('permission_menu', $permission_menu);
+    }
+
+    public function back_to_home()
+    {
+        $this->reset_session();
+        return redirect('dashboard');
+    }
 
 
 }

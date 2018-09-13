@@ -10,9 +10,9 @@
 			</ol>
 		</div>
         @php
-			$permissionCheck = permissionCheck();
+			$permissionCheck =  Session::get('permission_menu');
         @endphp
-		@if (in_array('add-role.create',array_column($permissionCheck, 'menu_url')))
+		@if (in_array('add-role.create',$permissionCheck))
 			<div class="col-lg-9 col-sm-8 col-md-8 col-xs-12">
 				<a href="{{ route('add-role.create') }}"  class="btn btn-success pull-right m-l-20 hidden-xs hidden-sm waves-effect waves-light"> <i class="fa fa-plus-circle" aria-hidden="true"></i> Add Role</a>
 			</div>
@@ -53,12 +53,12 @@
                                    <td style="width: 300px;">{!! ++$sl !!}</td>
                                    <td>{!! $value->role_name !!}</td>
                                    <td style="width: 100px;">
-									   @if (in_array('add-role.edit',array_column($permissionCheck, 'menu_url')))
+									   @if (in_array('add-role.edit',$permissionCheck))
 										   <a href="{!! route('add-role.edit',$value->role_id) !!}"  class="btn btn-success btn-md btnColor">
 											   <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
 										   </a>
 									   @endif
-									   @if (in_array('add-role.destroy',array_column($permissionCheck, 'menu_url')))
+									   @if (in_array('add-role.destroy',$permissionCheck))
 									   		<a href="{!!route('add-role.destroy',$value->role_id )!!}" data-token="{!! csrf_token() !!}" data-id="{!! $value->role_id!!}"
 											   class="delete btn btn-danger btn-md deleteBtn btnColor"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
 										@endif
