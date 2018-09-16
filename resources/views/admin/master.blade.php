@@ -86,14 +86,10 @@
             <div class="top-left-part">
                 <!-- Logo -->
                 <a class="logo" href="{{url('dashboard')}}">
-                    <!-- Logo icon image, you can use font-icon also --><b>
-                        <!--This is dark logo icon--><img style="width: 152px;margin-left: 26px;    margin-top: 12px;"
-                                                          src="{!! asset('admin_assets/img/logo.png') !!}" alt="home"
-                                                          class="dark-logo"/>
+                    <b>
+                        Company Logo
                     </b>
-                    <!-- Logo text image you can use text also --><span class="hidden-xs">
-                        <!--This is dark logo text-->
-                     </span> </a>
+                  </a>
             </div>
             <!-- /Logo -->
             <!-- Search input and Toggle icon -->

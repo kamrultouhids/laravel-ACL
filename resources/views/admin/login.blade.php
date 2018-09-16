@@ -45,7 +45,7 @@
 					<div class="white-box">
 						<h3 class="box-title m-b-0">Log In</h3>
 						<div class="login-logo" style="text-align: center">
-							<img src="{!! asset('admin_assets/img/logo2.png') !!}" height="120" width="auto" style="margin-top: 25px"/>
+							<b>Company Logo</b>
 						</div>
 						{!! Form::open(['url' => 'login','class' => 'form-horizontal new-lg-form','id' => 'loginform']) !!}
 							@if($errors->any())
