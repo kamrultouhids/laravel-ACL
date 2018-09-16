@@ -3,43 +3,43 @@
 namespace App\Http\Controllers\User;
 
 use App\Model\Menu;
-use App\Model\Module;
+
 use App\Model\Role;
+
+use App\Model\Module;
 
 use Illuminate\Http\Request;
 
-use Illuminate\Support\Facades\Auth;
+use App\Model\MenuPermission;
+
 use function MongoDB\BSON\toJSON;
 
 use Illuminate\Support\Facades\DB;
 
 use App\Http\Controllers\Controller;
 
-use App\Http\Requests\RolePermissionRequest;
+use Illuminate\Support\Facades\Auth;
 
+use App\Http\Requests\RolePermissionRequest;
 
 class RolePermissionController extends Controller
 {
-
     public function index()
     {
         $roleList = Role::pluck('role_name','role_id');
         return view('admin.user.role.add_user_permission', ['data' => $roleList]);
     }
 
-
     public function getAllMenu(Request $request)
     {
         $role_id     = $request->role_id;
-        $permissions =  json_decode(DB::table('menus')
-                        ->select(DB::raw('menus.id, menus.name, menus.menu_url, menus.parent_id, menus.module_id,menu_permission.menu_id'))
+        $permissions =  json_decode(Menu::select(DB::raw('menus.id, menus.name, menus.menu_url, menus.parent_id, menus.module_id,menu_permission.menu_id'))
                         ->join('menu_permission', 'menu_permission.menu_id', '=', 'menus.id')
                         ->where('menu_permission.role_id', '=', $role_id)
                         ->get()->toJson(),true);
 
 
-        $allMenus = json_decode(DB::table('menus')
-                    ->select(DB::raw('menus.*,modules.name as moduleName,modules.icon_class'))
+        $allMenus = json_decode(Menu::select(DB::raw('menus.*,modules.name as moduleName,modules.icon_class'))
                     ->join('modules', 'modules.id', '=', 'menus.module_id')
                     ->where('menus.status', '=', 1)
                     ->whereNotNull('menu_url')
@@ -74,7 +74,6 @@ class RolePermissionController extends Controller
         return ['arrayFormat'=>$arrayFormat,'subMenu'=>$subMenu];
     }
 
-
     public function store(RolePermissionRequest $request)
     {
 
@@ -82,7 +81,7 @@ class RolePermissionController extends Controller
             DB::beginTransaction();
 
                 $role_id    =  $request->role_id;
-                DB::table('menu_permission')->where('role_id', '=', $role_id)->delete();
+                MenuPermission::where('role_id', '=', $role_id)->delete();
                 $menu       = count($request->menu_id);
 
                 if($menu == 0)
@@ -93,24 +92,24 @@ class RolePermissionController extends Controller
 
                 for ($i = 0; $i < $menu; $i++)
                 {
-                    $getParentId = DB::table('menus')->where('id','=',$request->menu_id[$i])->first();
+                    $getParentId = Menu::where('id','=',$request->menu_id[$i])->first();
                     if($getParentId->parent_id !=0)
                     {
-                        $checkParentMenuDuplicate = DB::table('menu_permission')->where('role_id',$role_id)->where('menu_id',$getParentId->parent_id)->first();
+                        $checkParentMenuDuplicate = MenuPermission::where('role_id',$role_id)->where('menu_id',$getParentId->parent_id)->first();
                         if(!$checkParentMenuDuplicate)
                         {
                             $insertParentMenu = array(
                                 "menu_id" => $getParentId->parent_id,
                                 "role_id" => $role_id,
                             );
-                            DB::table('menu_permission')->insert($insertParentMenu);
+                            MenuPermission::insert($insertParentMenu);
                         }
                     }
                     $insertMenu = array(
                         "menu_id" => $request->menu_id[$i],
                         "role_id" => $role_id,
                     );
-                    DB::table('menu_permission')->insert($insertMenu);
+                    MenuPermission::insert($insertMenu);
                 }
             $this->reset_session();
             DB::commit();
@@ -160,6 +159,5 @@ class RolePermissionController extends Controller
         $this->reset_session();
         return redirect('dashboard');
     }
-
 
 }
